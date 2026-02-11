@@ -1,0 +1,110 @@
+{% extends "themes/"|add:THEME|add:"/base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+          <i class="fas fa-check-circle mr-1"></i>
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    
+        <form method="get" class="form-inline mb-3">
+        <input type="text" name="q" class="form-control mr-2"
+               placeholder="Search email..."
+               value="{{ request.GET.q }}">
+        <button class="btn btn-primary">Search</button>
+        </form>
+
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Email</th>
+                    <th>Staff</th>
+                    <th>Status</th>
+                    <th width="100">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.email }}</td>
+
+                    <td>
+                        {% if user.is_staff %}
+                            <span class="badge badge-info">Staff</span>
+                        {% else %}
+                            <span class="badge badge-secondary">User</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if user.is_active %}
+                            <span class="badge badge-success">Active</span>
+                        {% else %}
+                            <span class="badge badge-danger">Disabled</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-center">
+                        <a href="{% url 'users:edit' user.pk %}" 
+                           class="btn btn-sm btn-warning">
+                           <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'users:disable' user.id %}"
+                           class="btn btn-sm {% if user.is_active %}btn-danger{% else %}btn-success{% endif %}">
+                            {% if user.is_active %}
+                                <i class="fas fa-ban"></i>
+                            {% else %}
+                                <i class="fas fa-check"></i>
+                            {% endif %}
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">
+                        No users found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if is_paginated %}
+        <nav>
+            <ul class="pagination justify-content-end">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                            Previous
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <span class="page-link">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+                </li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                            Next
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+</div>
+
+{% endblock %}
+
+

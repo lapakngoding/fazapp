@@ -1,0 +1,26 @@
+{% extends "themes/"|add:THEME|add:"/base.html" %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Group Name</label>
+                {{ form.name }}
+            </div>
+
+            <div class="form-group">
+                <label>Permissions</label>
+                {{ form.permissions }}
+            </div>
+
+            <button class="btn btn-primary">
+                Save
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

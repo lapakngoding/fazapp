@@ -1,0 +1,55 @@
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'core:dashboard' %}">
+        <div class="sidebar-brand-icon">
+            <i class="fas fa-code"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">FazApp</div>
+    </a>
+
+    <hr class="sidebar-divider my-0">
+
+    {% for item in SIDEBAR_MENU %}
+
+        {# ===== MENU TANPA SUBMENU ===== #}
+        {% if not item.children %}
+            <li class="nav-item {% if item.active %}active{% endif %}">
+                <a class="nav-link" href="{% url item.url %}">
+                    <i class="{{ item.icon }}"></i>
+                    <span>{{ item.label }}</span>
+                </a>
+            </li>
+        {% endif %}
+
+        {# ===== MENU DENGAN SUBMENU ===== #}
+        {% if item.children %}
+            <li class="nav-item {% if item.active %}active{% endif %}">
+                <a class="nav-link {% if not item.active %}collapsed{% endif %}"
+                   href="#"
+                   data-toggle="collapse"
+                   data-target="#menu-{{ forloop.counter }}"
+                   aria-expanded="{% if item.active %}true{% else %}false{% endif %}">
+                    <i class="{{ item.icon }}"></i>
+                    <span>{{ item.label }}</span>
+                </a>
+
+                <div id="menu-{{ forloop.counter }}"
+                     class="collapse {% if item.active %}show{% endif %}">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        {% for child in item.children %}
+                            <a class="collapse-item {% if child.url|cut:':' == request.resolver_match.url_name %}active{% endif %}"
+                               href="{% url child.url %}">
+                                {{ child.label }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </li>
+        {% endif %}
+
+    {% endfor %}
+
+    <hr class="sidebar-divider d-none d-md-block">
+</ul>
+
