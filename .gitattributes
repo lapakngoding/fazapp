@@ -1,0 +1,6 @@
+# Exclude vendor files from language detection
+static/vendor/** linguist-vendored
+static/sbadmin/** linguist-vendored
+
+# Mark as Python project
+*.py linguist-language=Python
