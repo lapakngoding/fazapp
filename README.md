@@ -13,7 +13,7 @@ Aplikasi CMS (Content Management System) berbasis Django yang dirancang dengan a
 ## 🛠️ Teknologi yang Digunakan
 - **Backend:** [Python 3.x](https://www.python.org/), [Django 4.x/5.x](https://www.djangoproject.com/)
 - **Frontend:** [Bootstrap](https://getbootstrap.com/), [SB Admin 2](https://startbootstrap.com/theme/sb-admin-2)
-- **Database:** [SQLite/PostgreSQL]
+- **Database:** [SQLite/PostgreSQL/MySql]
 
 ## 📋 Prasyarat
 Sebelum menjalankan proyek ini, pastikan kamu sudah menginstal:
