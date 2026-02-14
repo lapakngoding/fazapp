@@ -23,6 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.core.urls')),
     path("users/", include("users.urls", namespace="users")),
+    path("core/", include("apps.core.urls")),
+    path("users/", include("apps.users.urls")),
 ]
 
 if settings.DEBUG:
@@ -30,3 +32,6 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
+
+handler403 = "core.views.permission_denied_view"
+handler404 = "core.views.page_not_found_view"

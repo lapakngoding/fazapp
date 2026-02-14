@@ -7,6 +7,12 @@ SIDEBAR_MENU = [
         "url": "core:dashboard",
     },
     {
+        "label": "Hsitories",
+        "icon": "fas fa-history",
+        "permissions": ["core.view_user"],
+        "url": "core:audit_logs",
+    },
+    {
         "label": "Settings",
         "icon": "fas fa-cog",
         "children": [

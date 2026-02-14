@@ -7,11 +7,11 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import update_session_auth_hash
 from django import forms
 from django.urls import reverse
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import permission_required
-from django.db.models import Q
 from .services import UserService, GroupService
 from apps.core.mixins import BasePermissionMixin
+from apps.users.selectors.user_selectors import search_users
 
 from .forms import ProfileForm, BootstrapPasswordChangeForm, UserCreateForm, UserUpdateForm, GroupForm
 
@@ -61,6 +61,11 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
         context["page_title"] = "Profile Ubah Password"
         return context
 
+from apps.users.selectors.user_selectors import (
+    get_all_users,
+    search_users
+)
+
 class UserListView(BasePermissionMixin, ListView):
     model = User
     template_name = "users/list.html"
@@ -68,24 +73,16 @@ class UserListView(BasePermissionMixin, ListView):
     permission_required = "core.view_user"
     raise_exception = True
     ordering = ["-date_joined"]
-    paginate_by = 2
+    paginate_by = 5
 
     def get_queryset(self):
-        queryset = super().get_queryset()
         q = self.request.GET.get("q")
 
         if q:
-            queryset = queryset.filter(
-                Q(email__icontains=q) |
-                Q(username__icontains=q)
-            )
+            return search_users(q)
 
-        return queryset
+        return get_all_users()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["page_title"] = "Users Management"
-        return context
 
 class UserCreateView(LoginRequiredMixin, BasePermissionMixin, CreateView):
     model = User

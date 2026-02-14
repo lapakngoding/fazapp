@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
@@ -61,4 +62,38 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+
+class AuditLog(models.Model):
+
+    ACTION_CHOICES = (
+        ("CREATE", "Create"),
+        ("UPDATE", "Update"),
+        ("DELETE", "Delete"),
+        ("TOGGLE", "Toggle Active"),
+    )
+
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="audit_logs"
+    )
+
+    target_model = models.CharField(max_length=100)
+    target_id = models.CharField(max_length=50)
+
+    action = models.CharField(
+        max_length=20,
+        choices=ACTION_CHOICES
+    )
+
+    description = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.actor} - {self.action} - {self.target_model}"
 
