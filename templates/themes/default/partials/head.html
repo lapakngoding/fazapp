@@ -1,16 +1,23 @@
 {% load static %}    
-    <meta charset="UTF-8">
-    <title> {% block title %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title> {% block title %}
     {% if page_title %}
       FazApp | {{ page_title }}
     {% else %}
       FazApp
     {% endif %}
   {% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- SB Admin 2 CSS -->
-    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
-    <link href="{% static 'sbadmin/css/sb-admin-2.min.css' %}" rel="stylesheet">
+<meta name="description" content="{{ portal.meta_description }}">
+<meta name="keywords" content="{{ portal.meta_keywords }}">
 
-    {% block extra_css %}{% endblock %}
+{% if portal.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ portal.favicon.url }}">
+{% endif %}
+
+<link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+<link href="{% static 'sbadmin/css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+{% block extra_css %}{% endblock %}

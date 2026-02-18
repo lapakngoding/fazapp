@@ -1,0 +1,171 @@
+{% extends "themes/"|add:THEME|add:"/base.html" %}
+
+{% block content %}
+{% if can_view_logs %}
+<!-- Welcome -->
+<div class="card shadow mb-4">
+    <div class="card-body">
+        Selamat datang, <strong>{{ request.user.email }}</strong> 👋  
+        <br>
+        <small class="text-muted">Login time: {{ now }}</small>
+    </div>
+</div>
+{% if can_view_user_stats %}
+<div class="row">
+    <!-- Total Users -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total Users
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ total_users }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Last Login -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    Staff
+                </div>
+                <div class="h6 mb-0 text-gray-800">
+                    {{ staff_users }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Status -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                    Superusers
+                </div>
+                <div class="h6 mb-0 text-gray-800">
+                    {{ superusers }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                    Total Group
+                </div>
+                <div class="h6 mb-0 text-gray-800">
+                    {{ total_groups }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                    Total Log
+                </div>
+                <div class="h6 mb-0 text-gray-800">
+                    {{ total_logs }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    Last Login
+                </div>
+                <div class="h6 mb-0 text-gray-800">
+                    {{ last_login|default:"First login" }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% if can_view_charts %}
+<hr>
+<h3>User Growth (Last 6 Months)</h3>
+
+<canvas id="userChart" height="100"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('userChart');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ chart_labels|safe|default:"[]" }},
+            datasets: [{
+                label: 'New Users',
+                data: {{ chart_data|safe|default:"[]" }},
+                borderWidth: 2,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+{% endif %}
+
+<div class="card shadow mb-4">
+        <div class="card-body">
+            <h3>Recent Activities</h3>
+            <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Actor</th>
+                    <th>Action</th>
+                    <th>Model</th>
+                    <th>Date</th>
+                </tr>
+
+                {% for log in recent_logs %}
+                <tr>
+                    <td>{{ log.actor }}</td>
+                    <td>{{ log.action }}</td>
+                    <td>{{ log.target_model }}</td>
+                    <td>{{ log.created_at }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No activity yet</td>
+                </tr>
+                {% endfor %}
+            </table>
+    </div>
+{% endif %}
+</div>
+{% endif %}
+{% if not can_view_user_stats and not can_view_charts and not can_view_logs %}
+<div class="alert alert-info">
+    You do not have access to dashboard statistics.
+</div>
+{% endif %}
+{% endblock %}
+

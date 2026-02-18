@@ -31,6 +31,7 @@ THIRD_PARTY_APPS = []
 LOCAL_APPS = [
     'apps.core.apps.CoreConfig',
     'apps.users.apps.UsersConfig',
+    'apps.portal.apps.PortalConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -64,6 +65,7 @@ TEMPLATES = [
                 #CUSTOM
                 'config.context_processors.global_settings',
                 'config.context_processors.sidebar_menu',
+                'config.context_processors.portal_context',
             ],
         },
     },

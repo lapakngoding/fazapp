@@ -1,0 +1,32 @@
+<header>
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for banner in banners %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                {% if banner.image %}
+                <img class="d-block w-100" src="{{ banner.image.url }}" alt="{{ banner.title }}" style="height: 500px; object-fit: cover;">
+                {% endif %}
+                <div class="carousel-caption d-none d-md-block">
+                    <h1 class="fw-bolder">{{ banner.title }}</h1>
+                    <p class="lead fw-normal text-white-50 mb-4">{{ banner.description }}</p>
+                    {% if banner.url %}
+                    <a class="btn btn-primary btn-lg" href="{{ banner.url }}">Selengkapnya</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="carousel-item active">
+                <div class="bg-dark py-5 text-center text-white">
+                    <h1>Selamat Datang di {{ portal.name }}</h1>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+    </div>
+</header>

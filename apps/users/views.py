@@ -11,7 +11,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import permission_required
 from .services import UserService, GroupService
 from apps.core.mixins import BasePermissionMixin
-from apps.users.selectors.user_selectors import search_users
+from apps.users.selectors import search_users
 
 from .forms import ProfileForm, BootstrapPasswordChangeForm, UserCreateForm, UserUpdateForm, GroupForm
 
@@ -82,6 +82,11 @@ class UserListView(BasePermissionMixin, ListView):
             return search_users(q)
 
         return get_all_users()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Users List"
+        return context
 
 
 class UserCreateView(LoginRequiredMixin, BasePermissionMixin, CreateView):

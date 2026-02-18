@@ -1,0 +1,62 @@
+{% extends "themes/"|add:THEME|add:"/base.html" %}
+
+{% block title %}{{ banner.pk|yesno:"Edit,Tambah" }} Banner{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    {% if object %} Edit Banner: {{ object.title }} {% else %} Tambah Banner Baru {% endif %}
+                </h6>
+                <a href="{% url 'portal:banner_list' %}" class="btn btn-secondary btn-sm">Kembali</a>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {# Looping Form fields #}
+                    {% for field in form %}
+                    <div class="form-group mb-3">
+                        <label class="font-weight-bold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <hr>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-1"></i> Simpan Banner
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-info">Tips Banner</h6>
+            </div>
+            <div class="card-body">
+                <p class="small">
+                    * <strong>Ukuran Ideal:</strong> Gunakan gambar dengan rasio 16:9 (misal: 1920x1080 pixel) agar tidak terpotong.<br><br>
+                    * <strong>Urutan:</strong> Semakin kecil angka urutan, semakin depan posisi banner di slider.<br><br>
+                    * <strong>Link URL:</strong> Jika diisi, tombol "Selengkapnya" akan muncul di slide tersebut.
+                </p>
+                {% if object.image %}
+                <hr>
+                <label class="small font-weight-bold">Preview Saat Ini:</label>
+                <img src="{{ object.image.url }}" class="img-fluid rounded border">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -38,45 +38,45 @@ def sidebar_menu(request):
     if not request.user.is_authenticated:
         return {}
 
-    current_url = resolve(request.path_info).url_name
+    # Gunakan view_name lengkap (misal: 'users:list')
+    resolver = resolve(request.path_info)
+    current_full_url = f"{resolver.namespace}:{resolver.url_name}" if resolver.namespace else resolver.url_name
+    
     output = []
-
     for item in SIDEBAR_MENU:
         item_copy = item.copy()
-
-        # ===== CHECK PERMISSION PARENT =====
         if not has_permission(request.user, item_copy):
             continue
 
-        # ===== TANPA CHILD =====
         if "children" not in item_copy:
-            item_copy["active"] = (
-                current_url == item_copy["url"].split(":")[-1]
-            )
+            # Bandingkan full URL name agar presisi
+            item_copy["active"] = (current_full_url == item_copy["url"])
             output.append(item_copy)
             continue
 
-        # ===== DENGAN CHILD =====
         filtered_children = []
         active_child = False
-
         for child in item_copy["children"]:
             if not has_permission(request.user, child):
                 continue
-
-            if current_url == child["url"].split(":")[-1]:
+            
+            # Cek jika salah satu child sedang aktif
+            if current_full_url == child["url"]:
+                child["active"] = True # Tambahkan flag active ke child juga
                 active_child = True
-
+            
             filtered_children.append(child)
 
-        if not filtered_children:
-            continue
+        if filtered_children:
+            item_copy["children"] = filtered_children
+            item_copy["active"] = active_child
+            output.append(item_copy)
 
-        item_copy["children"] = filtered_children
-        item_copy["active"] = active_child
-        output.append(item_copy)
+    return {"SIDEBAR_MENU": output}
 
+from portal.selectors.portal_selectors import get_site_identity
+
+def portal_context(request):
     return {
-        "SIDEBAR_MENU": output
+        'portal': get_site_identity()
     }
-

@@ -1,0 +1,11 @@
+{% extends "portal/public/base_public.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    {# Di sini kita susun urutan section-nya #}
+    {% include "portal/public/partials/header.html" %}
+    {% include "portal/public/partials/section.html" %}
+    {% include "portal/public/partials/testimonial.html" %}
+    {% include "portal/public/partials/section2.html" %}
+{% endblock %}

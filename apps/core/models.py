@@ -97,3 +97,16 @@ class AuditLog(models.Model):
     def __str__(self):
         return f"{self.actor} - {self.action} - {self.target_model}"
 
+from django.db import models
+
+class DashboardPermission(models.Model):
+    class Meta:
+        managed = False  # Tidak membuat tabel di DB
+        permissions = [
+            ("view_dashboard_stats", "Can view dashboard statistics"),
+            ("view_user_stats", "Can view user statistics"),
+            ("view_charts", "Can view charts"),
+            ("view_logs", "Can view audit logs"),
+        ]
+
+

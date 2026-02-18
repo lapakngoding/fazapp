@@ -54,6 +54,24 @@ SIDEBAR_MENU = [
     ],
     "permission": "auth.view_group",
     },
+    # Tambahkan entri ini ke dalam list SIDEBAR_MENU
+    {
+        "label": "Portal Management",
+        "icon": "fas fa-desktop",
+        "permissions": ["portal.change_siteidentity"],
+        "children": [
+            {
+                "label": "Site Configuration",
+                "url": "portal:settings",
+                "permissions": ["portal.change_siteidentity"],
+            },
+            {
+                "label": "Banner Slider",
+                "url": "portal:banner_list",
+                "permissions": ["portal.view_banner"],
+            },
+        ],
+    },
 
 ]
 

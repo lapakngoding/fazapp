@@ -18,13 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from apps.portal.views.public_views import LandingPageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('apps.core.urls')),
+    path('', LandingPageView.as_view(), name='index'),
+    path('auth/', include('apps.core.urls', namespace='core')),
     path("users/", include("users.urls", namespace="users")),
-    path("core/", include("apps.core.urls")),
-    path("users/", include("apps.users.urls")),
+    #path("core/", include("apps.core.urls")),
+    #path("users/", include("apps.users.urls")),
+    path('portal/', include('apps.portal.urls', namespace='portal')),
 ]
 
 if settings.DEBUG:
@@ -33,5 +36,9 @@ if settings.DEBUG:
         document_root=settings.MEDIA_ROOT
     )
 
-handler403 = "core.views.permission_denied_view"
-handler404 = "core.views.page_not_found_view"
+#handler403 = "apps.core.views.dashboard.permission_denied_view"
+#handler404 = "apps.core.views.dashboard.page_not_found_view"
+
+handler403 = "apps.core.views.errors.permission_denied_view"
+handler404 = "apps.core.views.errors.page_not_found_view"
+
