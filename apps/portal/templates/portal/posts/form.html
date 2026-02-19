@@ -1,0 +1,80 @@
+{% extends "themes/"|add:THEME|add:"/base.html" %}
+
+{% block title %}{{ object.pk|yesno:"Edit,Tulis" }} Berita{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-9">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    {% if object %} Edit Berita {% else %} Tulis Berita Baru {% endif %}
+                </h6>
+                <a href="{% url 'portal:post_list' %}" class="btn btn-secondary btn-sm">Kembali</a>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="form-group mb-4">
+                        <label class="font-weight-bold">Judul Berita</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}<div class="text-danger small">{{ form.title.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-4">
+                                <label class="font-weight-bold">Kategori</label>
+                                {{ form.category }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-4">
+                                <label class="font-weight-bold">Gambar Utama</label>
+                                {{ form.image }}
+                                <small class="text-muted d-block">Gunakan gambar yang jelas (Landscape).</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="font-weight-bold">Isi Berita</label>
+                        {{ form.content }}
+                        {% if form.content.errors %}<div class="text-danger small">{{ form.content.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            {{ form.is_published }}
+                            <label class="custom-control-label" for="{{ form.is_published.id_for_label }}">Terbitkan sekarang (Muncul di Landing Page)</label>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-paper-plane mr-1"></i> Simpan & Publikasikan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 bg-light">
+                <h6 class="m-0 font-weight-bold text-dark">Informasi</h6>
+            </div>
+            <div class="card-body small">
+                <p><strong>Tips:</strong> Pastikan isi berita menggunakan bahasa yang formal namun mudah dipahami orang tua siswa.</p>
+                <p><strong>Slug:</strong> URL akan dibuat otomatis dari judul berita Suhu secara SEO-friendly.</p>
+                {% if object.image %}
+                <hr>
+                <p class="font-weight-bold">Gambar Saat Ini:</p>
+                <img src="{{ object.image.url }}" class="img-fluid rounded shadow-sm">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
