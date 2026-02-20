@@ -70,6 +70,11 @@ SIDEBAR_MENU = [
                 "url": "portal:banner_list",
                 "permissions": ["portal.view_banner"],
             },
+            {
+                "label": "Berita & Artikel",
+                "url": "portal:post_list",
+                "permissions": ["portal.view_post"],
+            },
         ],
     },
 

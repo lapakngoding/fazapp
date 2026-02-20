@@ -1,0 +1,38 @@
+{% extends "portal/public/base_public.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container px-5 my-5">
+        <div class="row gx-5">
+            <div class="col-lg-3">
+                <div class="d-flex align-items-center mt-lg-5 mb-4">
+                    <div class="ms-3">
+                        <div class="fw-bold">Diposting pada:</div>
+                        <div class="text-muted">{{ post.created_at|date:"d F Y" }}</div>
+                        <div class="badge bg-primary mt-2">{{ post.category.name }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <article>
+                    <header class="mb-4">
+                        <h1 class="fw-bolder mb-1">{{ post.title }}</h1>
+                    </header>
+                    <figure class="mb-4">
+                        <img class="img-fluid rounded" src="{{ post.image.url }}" alt="..." />
+                    </figure>
+                    <section class="mb-5">
+                        <div class="fs-5 mb-4">
+                            {{ post.content|safe }}  {# Filter |safe wajib supaya HTML dirender #}
+                        </div>
+                    </section>
+                </article>
+                <hr>
+                <a href="{% url 'index' %}" class="btn btn-outline-dark"> Kembali ke Beranda</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

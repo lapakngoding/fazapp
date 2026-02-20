@@ -3,7 +3,7 @@
 {% block title %}{{ object.pk|yesno:"Edit,Tulis" }} Berita{% endblock %}
 
 {% block content %}
-<div class="row">
+{{ form.media }}<div class="row">
     <div class="col-lg-9">
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
