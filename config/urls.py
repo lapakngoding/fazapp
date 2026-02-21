@@ -25,10 +25,9 @@ urlpatterns = [
     path('', LandingPageView.as_view(), name='index'),
     path('auth/', include('apps.core.urls', namespace='core')),
     path("users/", include("users.urls", namespace="users")),
-    #path("core/", include("apps.core.urls")),
-    #path("users/", include("apps.users.urls")),
     path('portal/', include('apps.portal.urls', namespace='portal')),
     path("ckeditor5/", include('django_ckeditor_5.urls'), name="ck_editor_5_upload_file"),
+    path('akademik/', include('apps.akademik.urls')),
 ]
 
 if settings.DEBUG:
@@ -36,9 +35,6 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
-
-#handler403 = "apps.core.views.dashboard.permission_denied_view"
-#handler404 = "apps.core.views.dashboard.page_not_found_view"
 
 handler403 = "apps.core.views.errors.permission_denied_view"
 handler404 = "apps.core.views.errors.page_not_found_view"
