@@ -2,8 +2,8 @@ from django.urls import reverse_lazy
 
 SIDEBAR_MENU = [
     {
-        "label": "Dashboard",
-        "icon": "fas fa-tachometer-alt",
+        "label": "Home",
+        "icon": "fas fa-home",
         "url": "core:dashboard",
     },
     {
@@ -76,6 +76,27 @@ SIDEBAR_MENU = [
                 "permissions": ["portal.view_post"],
             },
         ],
+    },
+    # MENU SIM Akademik
+    {
+        'label': 'SIM Akademik',
+        'icon': 'fas fa-fw fa-graduation-cap', # Icon FontAwesome
+        "permissions": ["core.view_user"],
+        'children': [
+            {
+                "label": "Dashboard",
+                "url": "akademik:dashboard_akademik",
+                "permissions": ["core.view_user"],
+            },
+            {
+                "label": "Daftar Guru",
+                "url": "akademik:teacher_list",
+            },
+            {
+                "label": "Daftar Kelas",
+                "url": "akademik:classroom_list",
+            },
+        ]
     },
 
 ]
